@@ -14,14 +14,11 @@ class Specinfra::Helper::DetectOs::Redhat < Specinfra::Helper::DetectOs
         release = $1
       end
 
-      { :family => 'redhat', :release => release }
+      majorrelease = run_command('rpm -qf --queryformat="%{VERSION}" /etc/redhat-release').stdout
+
+      { :family => 'redhat', :release => release, :majorrelease => majorrelease }
     elsif run_command('ls /etc/system-release').success?
       { :family => 'redhat', :release => nil  } # Amazon Linux
     end
   end
 end
-
-
-
-
-
